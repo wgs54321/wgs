@@ -1,23 +1,993 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="./CSS/c.css"></head>
-    <link rel="shortcut icon" href="./img/index.ico" >
-    <title>老王欢迎你</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>老王 — 把日子练成硬的</title>
+<meta name="description" content="杠铃不会陪你演戏。老王的主页，只有重量、汗和证据。">
+<meta name="author" content="老王">
+<meta name="theme-color" content="#08080A">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="老王 — 把日子练成硬的">
+<meta property="og:description" content="杠铃不会陪你演戏。">
+<meta property="og:image" content="https://wgs.higlm.com/img/p2.jpg">
+<link rel="icon" href="./img/index.ico">
+<link rel="apple-touch-icon" href="./img/p1.jpg">
+<script>document.documentElement.classList.add('js');</script>
+<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+<style>
+/* ============================================================
+   老王 · 个人主页（深色版）
+   单文件、零依赖。改文案直接搜「01 / 02 / 03」区块。
+   照片在 <section class="strip-wrap"> 里，复制 <figure class="tile"> 即可增图。
+   ============================================================ */
+
+*,*::before,*::after{box-sizing:border-box}
+
+:root{
+  --bg:        #08080A;
+  --bg-2:      #0C0C0F;
+  --fg:        #F3F1EC;
+  --dim:       #8E8B85;
+  --line:      rgba(243,241,236,.15);
+  --line-2:    rgba(243,241,236,.07);
+  --accent:    #E4552D;
+  --display: "PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+  --mono: ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Courier New",monospace;
+  --maxw: 1240px;
+  --ease: cubic-bezier(.22,.68,.28,1);
+}
+
+html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth }
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--fg);
+  font-family:var(--display);
+  font-size:16px;
+  line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+
+/* 左上角的暖光 */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background:
+    radial-gradient(900px 520px at 8% -6%, rgba(228,85,45,.13), transparent 62%),
+    radial-gradient(720px 420px at 96% 8%, rgba(228,85,45,.05), transparent 60%);
+}
+
+::selection{ background:var(--accent); color:#fff }
+
+a{ color:inherit }
+
+:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:3px;
+}
+
+img{ max-width:100%; display:block }
+
+/* ---------- 顶栏 ---------- */
+.nav{
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:80;
+  border-bottom:1px solid transparent;
+  transition:border-color .45s var(--ease),background .45s var(--ease),backdrop-filter .45s;
+}
+.nav.is-stuck{
+  background:rgba(8,8,10,.72);
+  -webkit-backdrop-filter:saturate(180%) blur(16px);
+  backdrop-filter:saturate(180%) blur(16px);
+  border-bottom-color:var(--line-2);
+}
+.nav-inner{
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:0 32px;
+  height:78px;
+  display:flex;
+  align-items:center;
+  gap:28px;
+}
+.mark{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  text-decoration:none;
+  font-weight:800;
+  font-size:19px;
+  letter-spacing:.02em;
+}
+.mark i{
+  font-style:normal;
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:.3em;
+  color:var(--dim);
+  text-transform:uppercase;
+}
+.nav-links{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:34px;
+}
+.nav-links a{
+  text-decoration:none;
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--dim);
+  transition:color .3s var(--ease);
+  position:relative;
+}
+.nav-links a::after{
+  content:"";
+  position:absolute; left:0; right:0; bottom:-6px;
+  height:1px; background:var(--accent);
+  transform:scaleX(0); transform-origin:left;
+  transition:transform .45s var(--ease);
+}
+.nav-links a:hover{ color:var(--fg) }
+.nav-links a:hover::after{ transform:scaleX(1) }
+
+/* ---------- 首屏 ---------- */
+.hero{
+  position:relative;
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:168px 32px 96px;
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:70px;
+  align-items:center;
+  overflow:hidden;
+}
+.hero-copy{ position:relative; z-index:1 }
+
+.kicker{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:0 0 34px;
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.34em;
+  text-transform:uppercase;
+  color:var(--dim);
+}
+.kicker::before{
+  content:"";
+  width:34px; height:1px;
+  background:var(--accent);
+  flex:none;
+}
+
+h1{
+  margin:0;
+  font-size:clamp(50px,8.4vw,124px);
+  font-weight:900;
+  line-height:.98;
+  letter-spacing:-.035em;
+}
+h1 em{
+  font-style:normal;
+  color:var(--accent);
+}
+.lead{
+  max-width:26em;
+  margin:38px 0 0;
+  font-size:16.5px;
+  line-height:2;
+  color:#B9B5AE;
+}
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-top:46px;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:15px 30px;
+  border:1px solid var(--fg);
+  background:var(--fg);
+  color:#08080A;
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  font-weight:700;
+  text-decoration:none;
+  transition:transform .4s var(--ease),background .4s var(--ease),color .4s var(--ease),border-color .4s var(--ease);
+}
+.btn:hover{ transform:translateY(-3px) }
+.btn-ghost{
+  background:transparent;
+  color:var(--fg);
+  border-color:var(--line);
+  font-weight:500;
+}
+.btn-ghost:hover{ border-color:var(--fg) }
+
+.hero-shot{
+  position:relative;
+  margin:0;
+  z-index:1;
+}
+.hero-frame{ position:relative }
+.hero-frame::after{
+  content:"";
+  position:absolute;
+  inset:-16px -16px 16px 16px;
+  border:1px solid var(--line);
+  pointer-events:none;
+}
+.hero-shot img{
+  width:100%;
+  aspect-ratio:5/4;
+  object-fit:cover;
+  filter:grayscale(.15) contrast(1.06) brightness(.95);
+}
+.hero-shot figcaption{
+  margin-top:30px;
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--dim);
+}
+
+/* ---------- 自动滚动照片带 ---------- */
+.strip-wrap{
+  position:relative;
+  border-top:1px solid var(--line-2);
+  border-bottom:1px solid var(--line-2);
+  padding:26px 0;
+  background:var(--bg-2);
+}
+.strip-wrap::before,
+.strip-wrap::after{
+  content:"";
+  position:absolute;
+  top:0; bottom:0;
+  width:14vw;
+  z-index:3;
+  pointer-events:none;
+}
+.strip-wrap::before{ left:0;  background:linear-gradient(to right,var(--bg-2),rgba(12,12,15,0)) }
+.strip-wrap::after{  right:0; background:linear-gradient(to left,var(--bg-2),rgba(12,12,15,0)) }
+
+.strip{
+  overflow:hidden;
+  cursor:grab;
+}
+.strip-track{
+  display:flex;
+  width:max-content;
+  animation:slide 46s linear infinite;
+}
+.strip:hover .strip-track{ animation-play-state:paused }
+@keyframes slide{
+  from{ transform:translate3d(0,0,0) }
+  to{   transform:translate3d(-50%,0,0) }
+}
+
+.strip-group{
+  display:flex;
+  flex:none;
+  gap:18px;
+  padding-right:18px;
+}
+.tile{
+  position:relative;
+  flex:none;
+  width:400px;
+  margin:0;
+  overflow:hidden;
+  cursor:zoom-in;
+  background:#111;
+}
+.tile img{
+  width:400px;
+  height:300px;
+  object-fit:cover;
+  filter:grayscale(.45) contrast(1.08);
+  transition:filter .7s var(--ease),transform 1s var(--ease);
+}
+.tile:hover img{
+  filter:grayscale(0) contrast(1.05);
+  transform:scale(1.03);
+}
+.tile figcaption{
+  position:absolute;
+  left:0; right:0; bottom:0;
+  padding:38px 16px 12px;
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:rgba(243,241,236,.82);
+  background:linear-gradient(to top,rgba(4,4,6,.78),rgba(4,4,6,0));
+  opacity:0;
+  transition:opacity .4s var(--ease);
+}
+.tile:hover figcaption,
+.tile:focus-visible figcaption{ opacity:1 }
+@media (hover:none){ .tile figcaption{ opacity:1 } }
+
+.strip-note{
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:16px 32px 0;
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:rgba(243,241,236,.28);
+}
+
+/* ---------- 数据 ---------- */
+.stats{
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:110px 32px 0;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+}
+.stat{
+  padding:30px 26px 28px;
+  border-top:1px solid var(--line-2);
+  border-left:1px solid var(--line-2);
+}
+.stat:first-child{ border-left:0; padding-left:0 }
+.stat:last-child{ padding-right:0 }
+.stat b{
+  display:block;
+  font-family:var(--mono);
+  font-size:clamp(38px,4.6vw,60px);
+  font-weight:700;
+  line-height:1;
+  letter-spacing:-.03em;
+}
+.stat span{
+  display:block;
+  margin-top:14px;
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  color:var(--dim);
+}
+
+/* ---------- 关于 ---------- */
+.section{
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:110px 32px;
+  border-top:1px solid var(--line-2);
+}
+.sec-head{
+  display:flex;
+  align-items:baseline;
+  gap:18px;
+  margin-bottom:52px;
+}
+.sec-head .num{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.24em;
+  color:var(--accent);
+}
+.sec-head h2{
+  margin:0;
+  font-size:clamp(24px,3vw,34px);
+  font-weight:800;
+  letter-spacing:-.01em;
+}
+.sec-head .aside{
+  margin-left:auto;
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--dim);
+}
+
+.about-grid{
+  display:grid;
+  grid-template-columns:1.25fr .75fr;
+  gap:70px;
+  align-items:start;
+}
+.prose{
+  max-width:34em;
+  font-size:17px;
+  line-height:2.05;
+  color:#B9B5AE;
+}
+.prose p{ margin:0 0 1.4em }
+.prose p:last-child{ margin-bottom:0 }
+.prose strong{
+  color:var(--fg);
+  font-weight:700;
+}
+.prose em{
+  font-style:normal;
+  color:var(--accent);
+  font-weight:700;
+}
+.facts{
+  margin:0;
+  padding:0;
+  list-style:none;
+  border-top:1px solid var(--line-2);
+}
+.facts li{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  padding:15px 0;
+  border-bottom:1px solid var(--line-2);
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.facts .k{ color:var(--dim) }
+.facts .v{ color:var(--fg) }
+
+/* ---------- 语录 ---------- */
+.quotes{ display:grid; gap:0 }
+.quote{
+  display:grid;
+  grid-template-columns:96px 1fr;
+  gap:36px;
+  align-items:start;
+  padding:44px 0;
+  border-top:1px solid var(--line-2);
+}
+.quote:first-child{ border-top:0; padding-top:0 }
+.quote .n{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.24em;
+  color:var(--accent);
+  padding-top:14px;
+}
+.quote p{
+  margin:0;
+  font-size:clamp(22px,3.1vw,38px);
+  font-weight:800;
+  line-height:1.55;
+  letter-spacing:-.02em;
+  text-wrap:balance;
+}
+.quote p span{ color:var(--dim) }
+.quote small{
+  display:block;
+  margin-top:18px;
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--dim);
+}
+
+/* ---------- 联系 ---------- */
+.contact{
+  border-top:1px solid var(--line-2);
+  background:
+    radial-gradient(760px 340px at 50% 120%, rgba(228,85,45,.14), transparent 70%);
+}
+.contact-inner{
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:140px 32px 120px;
+}
+.contact .kicker{ justify-content:flex-start }
+.mail{
+  display:inline-block;
+  margin:0;
+  font-size:clamp(26px,5.6vw,68px);
+  font-weight:900;
+  letter-spacing:-.03em;
+  line-height:1.1;
+  text-decoration:none;
+  color:var(--fg);
+  transition:color .4s var(--ease);
+  word-break:break-all;
+}
+.mail:hover{ color:var(--accent) }
+.contact .hint{
+  margin:28px 0 0;
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--dim);
+}
+
+/* ---------- 页脚 ---------- */
+.foot{
+  border-top:1px solid var(--line-2);
+}
+.foot-inner{
+  max-width:var(--maxw);
+  margin:0 auto;
+  padding:28px 32px 40px;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:14px;
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:rgba(243,241,236,.34);
+}
+.foot-inner .links{
+  margin-left:auto;
+  display:flex;
+  gap:24px;
+}
+.foot-inner a{
+  text-decoration:none;
+  color:rgba(243,241,236,.34);
+  transition:color .3s var(--ease);
+}
+.foot-inner a:hover{ color:var(--fg) }
+
+/* ---------- 灯箱 ---------- */
+.lb{
+  position:fixed;
+  inset:0;
+  z-index:120;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:56px 76px;
+  background:rgba(4,4,6,.96);
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .4s var(--ease),visibility .4s;
+}
+.lb.open{ opacity:1; visibility:visible }
+.lb img{
+  max-width:100%;
+  max-height:78vh;
+  object-fit:contain;
+  transform:scale(.97);
+  transition:transform .5s var(--ease);
+}
+.lb.open img{ transform:scale(1) }
+.lb-cap{
+  position:absolute;
+  left:0; right:0; bottom:28px;
+  text-align:center;
+  font-family:var(--mono);
+  font-size:10.5px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:rgba(243,241,236,.55);
+}
+.lb-btn{
+  position:absolute;
+  border:0;
+  background:none;
+  color:rgba(243,241,236,.65);
+  font-size:24px;
+  line-height:1;
+  width:48px; height:48px;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:50%;
+  cursor:pointer;
+  transition:color .3s var(--ease),background .3s var(--ease);
+}
+.lb-btn:hover{ color:#fff; background:rgba(243,241,236,.1) }
+.lb-btn:focus-visible{ outline-color:#fff }
+.lb-close{ top:16px; right:18px }
+.lb-prev{ left:10px; top:50%; transform:translateY(-50%) }
+.lb-next{ right:10px; top:50%; transform:translateY(-50%) }
+
+/* ---------- 入场 ---------- */
+.js .reveal{
+  opacity:0;
+  transform:translateY(22px);
+  transition:opacity 1s var(--ease),transform 1s var(--ease);
+}
+.js .reveal.in{ opacity:1; transform:none }
+@media (prefers-reduced-motion:reduce){
+  .js .reveal{ opacity:1; transform:none; transition:none }
+  .strip-track{ animation:none }
+  .strip{ overflow-x:auto }
+  .tile img,.lb img,.btn{ transition:none }
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:1080px){
+  .hero{ grid-template-columns:1fr; gap:56px; padding:140px 28px 80px }
+  .hero-shot{ max-width:460px }
+  .about-grid{ grid-template-columns:1fr; gap:40px }
+  .stats{ grid-template-columns:repeat(2,1fr) }
+  .stat:nth-child(odd){ border-left:0; padding-left:0 }
+  .stat:nth-child(even){ padding-right:0 }
+  .section{ padding:84px 28px }
+  .stats{ padding:84px 28px 0 }
+  .contact-inner{ padding:110px 28px 120px }
+}
+@media (max-width:720px){
+  .nav-inner{ padding:0 20px; height:64px; gap:14px }
+  .mark{ font-size:17px }
+  .mark i{ display:none }
+  .nav-links{ gap:18px }
+  .nav-links a{ font-size:10px; letter-spacing:.16em }
+  .nav-links a[data-optional]{ display:none }
+  .hero{ padding:118px 20px 64px }
+  .lead{ font-size:15.5px }
+  h1{ letter-spacing:-.03em }
+  .btn{ padding:13px 22px; font-size:10px }
+  .section{ padding:64px 20px }
+  .stats{ padding:64px 20px 0 }
+  .stat{ padding:26px 18px 24px }
+  .quote{ grid-template-columns:1fr; gap:14px; padding:32px 0 }
+  .quote .n{ padding-top:0 }
+  .contact-inner{ padding:84px 20px 96px }
+  .foot-inner{ padding:22px 20px 32px }
+  .foot-inner .links{ margin-left:0; width:100% }
+  .tile, .tile img{ width:290px }
+  .tile img{ height:218px }
+  .lb{ padding:24px }
+  .lb-prev{ left:0 }
+  .lb-next{ right:0 }
+  .strip-note{ padding:14px 20px 0 }
+}
+@media (max-width:400px){
+  .nav-links a[data-optional2]{ display:none }
+}
+</style>
 </head>
 
 <body>
-<div id="all">
-    <h1>大家好，这是我</h1><br>
-    <img :src="photoname" width="400px" height="300px"><br>
-    <h2>非常期待您的联系！</h2>
-    <h2>如果您无聊的话，可以来<a href="saolei.html">扫个雷</a></h2>
+
+<!-- ==================== 顶栏 ==================== -->
+<header class="nav" id="top">
+  <div class="nav-inner">
+    <a class="mark" href="#top">老王<i>W / 01</i></a>
+    <nav class="nav-links">
+      <a href="#about">About</a>
+      <a href="#quotes">Words</a>
+      <a href="#contact" data-optional>Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ==================== 首屏 ==================== -->
+  <section class="hero">
+    <!-- 改这里：一行小字 -->
+    <div class="hero-copy">
+      <p class="kicker">Hangzhou · Since 2022</p>
+
+      <!-- 改这里：主标题 -->
+      <h1>把日子<br>练成<em>硬的</em>。</h1>
+
+      <!-- 改这里：一段狠话 -->
+      <p class="lead">
+        杠铃不会陪你演戏。它能被举起多少，你就值多少。
+        这里没有鸡汤，没有打卡，只有重量、汗，和一次次把自己推过极限的证据。
+      </p>
+
+      <div class="actions">
+        <a class="btn" href="#photos">看照片</a>
+        <a class="btn btn-ghost" href="#contact">找我</a>
+      </div>
+    </div>
+
+    <!-- 改这里：首屏图 -->
+    <figure class="hero-shot reveal">
+      <div class="hero-frame">
+        <img src="./img/p2.jpg" alt="组间休息" width="400" height="300">
+      </div>
+      <figcaption>Fig.01 — 组间休息，也是一场对峙</figcaption>
+    </figure>
+  </section>
+
+  <!-- ==================== 自动滚动照片带 ==================== -->
+  <section class="strip-wrap" id="photos">
+    <div class="strip" aria-label="照片轮播，鼠标悬停可暂停">
+      <!--
+        加照片：把图片放进仓库 img/ 目录，然后复制一个 <figure class="tile"> 到两个 group 里各一份
+        （两份是为了无缝循环，内容必须完全一致）
+      -->
+      <div class="strip-track">
+        <div class="strip-group">
+          <figure class="tile" tabindex="0" role="button" aria-label="放大查看：练背日">
+            <img src="./img/p1.jpg" alt="练背日" width="400" height="300">
+            <figcaption>01 — 练背日 · 镜子不说谎</figcaption>
+          </figure>
+          <figure class="tile" tabindex="0" role="button" aria-label="放大查看：组间休息">
+            <img src="./img/p2.jpg" alt="组间休息" width="400" height="300">
+            <figcaption>02 — 组间休息 · 手机在手，重量在心</figcaption>
+          </figure>
+          <figure class="tile" tabindex="0" role="button" aria-label="放大查看：练背日">
+            <img src="./img/p1.jpg" alt="练背日" width="400" height="300">
+            <figcaption>03 — 背阔肌 · 唯一的勋章</figcaption>
+          </figure>
+          <figure class="tile" tabindex="0" role="button" aria-label="放大查看：组间休息">
+            <img src="./img/p2.jpg" alt="组间休息" width="400" height="300">
+            <figcaption>04 — 深蹲架 · 站稳了再说话</figcaption>
+          </figure>
+          <figure class="tile" tabindex="0" role="button" aria-label="放大查看：练背日">
+            <img src="./img/p1.jpg" alt="练背日" width="400" height="300">
+            <figcaption>05 — 更衣室 · 收工</figcaption>
+          </figure>
+          <figure class="tile" tabindex="0" role="button" aria-label="放大查看：组间休息">
+            <img src="./img/p2.jpg" alt="组间休息" width="400" height="300">
+            <figcaption>06 — 下一组 · 马上</figcaption>
+          </figure>
+        </div>
+        <div class="strip-group" aria-hidden="true">
+          <figure class="tile">
+            <img src="./img/p1.jpg" alt="" width="400" height="300">
+            <figcaption>01 — 练背日 · 镜子不说谎</figcaption>
+          </figure>
+          <figure class="tile">
+            <img src="./img/p2.jpg" alt="" width="400" height="300">
+            <figcaption>02 — 组间休息 · 手机在手，重量在心</figcaption>
+          </figure>
+          <figure class="tile">
+            <img src="./img/p1.jpg" alt="" width="400" height="300">
+            <figcaption>03 — 背阔肌 · 唯一的勋章</figcaption>
+          </figure>
+          <figure class="tile">
+            <img src="./img/p2.jpg" alt="" width="400" height="300">
+            <figcaption>04 — 深蹲架 · 站稳了再说话</figcaption>
+          </figure>
+          <figure class="tile">
+            <img src="./img/p1.jpg" alt="" width="400" height="300">
+            <figcaption>05 — 更衣室 · 收工</figcaption>
+          </figure>
+          <figure class="tile">
+            <img src="./img/p2.jpg" alt="" width="400" height="300">
+            <figcaption>06 — 下一组 · 马上</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+    <p class="strip-note">Auto Loop · 鼠标悬停暂停 · 点击放大</p>
+  </section>
+
+  <!-- ==================== 数据 ==================== -->
+  <section class="stats reveal">
+    <div class="stat"><b>04</b><span>每周训练 / Times</span></div>
+    <div class="stat"><b>03</b><span>不间断 / Years</span></div>
+    <div class="stat"><b>00</b><span>借口 / Excuses</span></div>
+    <div class="stat"><b>∞</b><span>上限 / Limit</span></div>
+  </section>
+
+  <!-- ==================== 01 关于 ==================== -->
+  <section class="section" id="about">
+    <div class="sec-head reveal">
+      <span class="num">01</span>
+      <h2>关于</h2>
+      <span class="aside">不多说，看结果</span>
+    </div>
+
+    <div class="about-grid">
+      <!-- 改这里：正文 -->
+      <div class="prose reveal">
+        <p>
+          我是老王。这个名字没什么来历，但它跟了我十几年，比大多数人都忠诚。
+        </p>
+        <p>
+          训练这件事，我从不上价值。<strong>它就是一个契约</strong>——你给它多少，它还你多少，
+          一分不少，也一分不多。世上很少有东西这么讲信用。
+        </p>
+        <p>
+          我见过太多人把「开始」当成成就。所以我这里不放计划表，不放打卡记录，只放结果：
+          <em>背、肩、腿，和站在镜子前的那点底气。</em>
+        </p>
+        <p>
+          不够好看的照片我不会放。不该说的漂亮话，我一句也不说。
+        </p>
+      </div>
+
+      <!-- 改这里：右侧清单 -->
+      <ul class="facts reveal">
+        <li><span class="k">Base</span><span class="v">杭州</span></li>
+        <li><span class="k">Mode</span><span class="v">一周四练</span></li>
+        <li><span class="k">Rule</span><span class="v">不找借口</span></li>
+        <li><span class="k">Status</span><span class="v">永远差一组</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ==================== 02 语录 ==================== -->
+  <section class="section" id="quotes">
+    <div class="sec-head reveal">
+      <span class="num">02</span>
+      <h2>语录</h2>
+      <span class="aside">练完走出门时想到的</span>
+    </div>
+
+    <div class="quotes">
+      <div class="quote reveal">
+        <span class="n">01</span>
+        <div>
+          <p>疼是<span>信号</span>，不是理由。</p>
+          <small>Pain is data · 2026</small>
+        </div>
+      </div>
+
+      <div class="quote reveal">
+        <span class="n">02</span>
+        <div>
+          <p>你糊弄它一次，<span>它记你一年</span>。</p>
+          <small>The iron remembers · 2026</small>
+        </div>
+      </div>
+
+      <div class="quote reveal">
+        <span class="n">03</span>
+        <div>
+          <p>天赋决定起点，<span>狠劲决定终点</span>。</p>
+          <small>Hard work beats talent · 2026</small>
+        </div>
+      </div>
+
+      <div class="quote reveal">
+        <span class="n">04</span>
+        <div>
+          <p>别人休息的日子，是我的<span>第五练</span>。</p>
+          <small>No days off · 2026</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 03 联系 ==================== -->
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <p class="kicker reveal">Contact</p>
+      <a class="mail reveal" href="mailto:wgs51@qq.com">wgs51@qq.com</a>
+      <p class="hint reveal">不看私信 · 只看邮件 · 回复很慢，但会回</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ==================== 页脚 ==================== -->
+<footer class="foot">
+  <div class="foot-inner">
+    <span>© <span id="year">2026</span> 老王</span>
+    <span>·</span>
+    <span>Handwritten HTML</span>
+    <div class="links">
+      <a href="https://github.com/wgs54321/wgs" target="_blank" rel="noopener">GitHub</a>
+      <a href="#top">Back to top</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ==================== 灯箱 ==================== -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="照片查看">
+  <button class="lb-btn lb-close" type="button" aria-label="关闭">✕</button>
+  <button class="lb-btn lb-prev" type="button" aria-label="上一张">‹</button>
+  <img id="lbImg" src="" alt="">
+  <button class="lb-btn lb-next" type="button" aria-label="下一张">›</button>
+  <div class="lb-cap" id="lbCap"></div>
 </div>
+
+<script>
+(function () {
+  'use strict';
+
+  var y = document.getElementById('year');
+  if (y) y.textContent = new Date().getFullYear();
+
+  /* 顶栏 */
+  var nav = document.querySelector('.nav');
+  var onScroll = function () {
+    nav.classList.toggle('is-stuck', window.scrollY > 10);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  /* 入场 */
+  var reveals = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  var vh = window.innerHeight || document.documentElement.clientHeight;
+  reveals = reveals.filter(function (el) {
+    if (el.getBoundingClientRect().top < vh * 0.95) {
+      el.classList.add('in');
+      return false;
+    }
+    return true;
+  });
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e, i) {
+        if (!e.isIntersecting) return;
+        e.target.style.transitionDelay = Math.min(i * 70, 210) + 'ms';
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    reveals.forEach(function (el) { io.observe(el); });
+  } else {
+    reveals.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  /* 灯箱：只取第一组（重复的那组仅用于滚动） */
+  var firstGroup = document.querySelector('.strip-group');
+  var tiles = firstGroup ? Array.prototype.slice.call(firstGroup.querySelectorAll('.tile')) : [];
+  var lb = document.getElementById('lb');
+  var lbImg = document.getElementById('lbImg');
+  var lbCap = document.getElementById('lbCap');
+  var current = 0;
+
+  function render(i) {
+    if (!tiles.length) return;
+    current = (i + tiles.length) % tiles.length;
+    var img = tiles[current].querySelector('img');
+    var cap = tiles[current].querySelector('figcaption');
+    lbImg.src = img.getAttribute('src');
+    lbImg.alt = img.getAttribute('alt') || '';
+    lbCap.textContent = cap ? cap.textContent : '';
+  }
+
+  function open(i) {
+    render(i);
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    lb.querySelector('.lb-close').focus();
+  }
+
+  function close() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  tiles.forEach(function (tile, i) {
+    tile.addEventListener('click', function () { open(i); });
+    tile.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        open(i);
+      }
+    });
+  });
+
+  lb.querySelector('.lb-close').addEventListener('click', close);
+  lb.querySelector('.lb-prev').addEventListener('click', function () { render(current - 1); });
+  lb.querySelector('.lb-next').addEventListener('click', function () { render(current + 1); });
+  lb.addEventListener('click', function (e) {
+    if (e.target === lb) close();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowLeft') render(current - 1);
+    else if (e.key === 'ArrowRight') render(current + 1);
+  });
+})();
+</script>
+
 </body>
 </html>
-<script src="./js/vue.js"></script>
-<script src="./js/main.js"></script>
